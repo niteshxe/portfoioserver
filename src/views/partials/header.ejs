@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NITESHXE // CMS</title>
+    <style>
+        :root {
+            --bg-color: #050505;
+            --text-main: #ffffff;
+            --accent-color: #FF1100;
+            --border-light: rgba(255, 255, 255, 0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Courier New', Courier, monospace; /* Monospace for that terminal feel */
+            line-height: 1.6;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 1rem;
+            margin-bottom: 3rem;
+            display: flex;
+            justify-content: space-between;
+            alignItems: center;
+        }
+
+        .logo {
+            font-weight: 900;
+            font-size: 1.5rem;
+            letter-spacing: -2px;
+            text-transform: uppercase;
+        }
+
+        .logo span {
+            color: var(--accent-color);
+        }
+
+        input, textarea, select, button {
+            background: #111;
+            border: 1px solid var(--border-light);
+            color: var(--text-main);
+            padding: 1rem;
+            font-family: inherit;
+            font-size: 1rem;
+            width: 100%;
+            margin-bottom: 1.5rem;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        button {
+            background: var(--accent-color);
+            color: #fff;
+            border: none;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        button:hover {
+            opacity: 0.8;
+        }
+
+        .card {
+            border: 1px solid var(--border-light);
+            padding: 2rem;
+            background: #0a0a0a;
+            margin-bottom: 2rem;
+        }
+
+        .btn-link {
+            text-decoration: none;
+            color: var(--accent-color);
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+        }
+
+        .status-badge {
+            font-size: 0.6rem;
+            letter-spacing: 0.2em;
+            background: var(--accent-color);
+            padding: 0.2rem 0.6rem;
+            color: #fff;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        /* Forms */
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.5);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        pre {
+            background: #111;
+            padding: 1rem;
+            border: 1px solid var(--border-light);
+            overflow: auto;
+            font-size: 0.8rem;
+            margin-bottom: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo"><span>NITESHXE</span> // CMS</div>
+            <nav>
+                <a href="/dashboard" class="btn-link" style="margin-right: 1.5rem;">Dashboard</a>
+                <a href="/logout" class="btn-link">Logout</a>
+            </nav>
+        </header>

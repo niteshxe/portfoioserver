@@ -1,0 +1,26 @@
+{
+  "title": "EMAIL",
+  "subtitle": "ADDRESSES",
+  "email": "niteshxe.dev@gmail.com",
+  "description": "HAVE PROJECT IN MIND? OR JUST WANT TO SAY HI? FEEL FREE TO REACH OUT AND START A CONVERSATION.",
+  "socials": [
+    {
+      "platform": "GITHUB",
+      "handle": "@NITESHXE",
+      "url": "https://github.com",
+      "id": "gh"
+    },
+    {
+      "platform": "TWITTER",
+      "handle": "@NITESHXE",
+      "url": "https://twitter.com",
+      "id": "tw"
+    },
+    {
+      "platform": "LINKEDIN",
+      "handle": "NITESHXE",
+      "url": "https://linkedin.com",
+      "id": "li"
+    }
+  ]
+}

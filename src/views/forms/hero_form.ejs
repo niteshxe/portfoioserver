@@ -1,0 +1,61 @@
+<div class="card">
+    <div class="status-badge">SECTION // STATUS</div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <div>
+            <label>STATUS TEXT</label>
+            <input type="text" name="status[text]" value="<%= data.status.text %>">
+        </div>
+        <div>
+            <label>ACTIVE STATUS</label>
+            <select name="status[active]">
+                <option value="true" <%= data.status.active ? 'selected' : '' %>>SYS.ONLINE</option>
+                <option value="false" <%= !data.status.active ? 'selected' : '' %>>SYS.OFFLINE</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="status-badge">SECTION // TITLE</div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <div>
+            <label>SOLID TITLE (UPPER)</label>
+            <input type="text" name="title[solid]" value="<%= data.title.solid %>">
+        </div>
+        <div>
+            <label>OUTLINE TITLE (LOWER)</label>
+            <input type="text" name="title[outline]" value="<%= data.title.outline %>">
+        </div>
+    </div>
+
+    <div class="status-badge">SECTION // ROLES</div>
+    <label>ROLES (COMMA SEPARATED)</label>
+    <input type="text" name="roles" value="<%= data.roles.join(', ') %>">
+
+    <div class="status-badge">SECTION // METRICS</div>
+    <div id="metrics-container">
+        <% data.metrics.forEach((metric, index) => { %>
+            <div class="card" style="margin-bottom: 1rem; padding: 1rem; border-color: rgba(255,255,255,0.05);">
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 1rem;">
+                    <div>
+                        <label>LABEL</label>
+                        <input type="text" name="metrics[<%= index %>][label]" value="<%= metric.label %>">
+                    </div>
+                    <div>
+                        <label>VALUE</label>
+                        <input type="text" name="metrics[<%= index %>][value]" value="<%= metric.value %>">
+                    </div>
+                    <div>
+                        <label>SUB</label>
+                        <input type="text" name="metrics[<%= index %>][sub]" value="<%= metric.sub %>">
+                    </div>
+                    <div>
+                        <label>HIGHLIGHT</label>
+                        <select name="metrics[<%= index %>][highlight]">
+                            <option value="true" <%= metric.highlight ? 'selected' : '' %>>YES</option>
+                            <option value="false" <%= !metric.highlight ? 'selected' : '' %>>NO</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        <% }) %>
+    </div>
+</div>

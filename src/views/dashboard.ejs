@@ -1,0 +1,23 @@
+<%- include('partials/header') %>
+
+<div class="card">
+    <div class="status-badge">SYSTEM // ONLINE</div>
+    <h1 style="margin-bottom: 2rem;">CONTROL PANEL</h1>
+    <p style="color: rgba(255,255,255,0.5); font-size: 0.8rem; margin-bottom: 2rem;">Select a data kernel to modify portfolio state.</p>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem;">
+        <% files.forEach(file => { %>
+            <div class="card" style="margin-bottom: 0; padding: 1.5rem; border-color: rgba(255,255,255,0.1);">
+                <h3 style="text-transform: uppercase; margin-bottom: 1rem;"><%= file %></h3>
+                <a href="/edit/<%= file %>" class="button" style="display: inline-block; padding: 0.8rem 1.5rem; background: #222; color: #fff; text-decoration: none; font-size: 0.8rem; font-weight: bold; width: auto; border: 1px solid var(--border-light);">EDIT KERNEL</a>
+            </div>
+        <% }) %>
+    </div>
+</div>
+
+<div style="font-size: 0.7rem; color: rgba(255,255,255,0.2); text-align: center; margin-top: 4rem;">
+    © <%= new Date().getFullYear() %> // NITESH VASHISHT // CMS 1.0.0
+</div>
+
+</body>
+</html>

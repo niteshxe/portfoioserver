@@ -1,0 +1,84 @@
+<%- include('partials/header') %>
+
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem;">
+        <div>
+            <div class="status-badge">KERNEL // <%= fileName.toUpperCase() %></div>
+            <h1>CONFIGURE STATE</h1>
+        </div>
+        <div>
+            <a href="/dashboard" class="btn-link" style="margin-right: 2rem;">← DASHBOARD</a>
+            <button onclick="toggleMode()" id="mode-toggle" style="display: inline-block; width: auto; background: #222; border: 1px solid var(--border-light); padding: 0.5rem 1rem; font-size: 0.7rem;">SWITCH TO RAW KERNEL</button>
+        </div>
+    </div>
+
+    <% if (typeof success !== 'undefined' || (typeof req !== 'undefined' && req.query.success)) { %>
+        <div style="background: rgba(0, 255, 0, 0.1); border: 1px solid #00ff00; color: #00ff00; padding: 1rem; margin-bottom: 2rem; font-size: 0.8rem; text-transform: uppercase;">
+            ✓ Changes committed successfully. Terminal state synchronized.
+        </div>
+    <% } %>
+
+    <% if (typeof error !== 'undefined') { %>
+        <div style="background: rgba(255, 0, 0, 0.1); border: 1px solid var(--accent-color); color: var(--accent-color); padding: 1rem; margin-bottom: 2rem; font-size: 0.8rem; text-transform: uppercase;">
+            ⚠️ <%= error %>
+        </div>
+    <% } %>
+
+    <!-- UI FORM MODE -->
+    <div id="ui-mode">
+        <form action="/edit/<%= fileName %>" method="POST">
+            <input type="hidden" name="_ui_mode" value="true">
+            
+            <% if (fileName === 'hero') { %>
+                <%- include('forms/hero_form') %>
+            <% } else if (fileName === 'projects') { %>
+                <%- include('forms/projects_form') %>
+            <% } else if (fileName === 'resume') { %>
+                <%- include('forms/resume_form') %>
+            <% } else if (fileName === 'about') { %>
+                <%- include('forms/about_form') %>
+            <% } else if (fileName === 'contact') { %>
+                <%- include('forms/contact_form') %>
+            <% } %>
+
+            <button type="submit" style="margin-top: 2rem; font-size: 1.2rem; padding: 2rem;">COMMIT UI CHANGES</button>
+        </form>
+    </div>
+
+    <!-- RAW JSON MODE -->
+    <div id="raw-mode" style="display: none;">
+        <form action="/edit/<%= fileName %>" method="POST">
+            <label>RAW JSON BUFFER</label>
+            <textarea name="jsonContent" id="jsonContent" style="height: 600px; font-family: monospace; font-size: 0.85rem;" spellcheck="false"></textarea>
+            <button type="submit" style="margin-top: 2rem;">COMMIT RAW BUFFER</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    let mode = 'ui';
+    const uiDiv = document.getElementById('ui-mode');
+    const rawDiv = document.getElementById('raw-mode');
+    const toggleBtn = document.getElementById('mode-toggle');
+    const rawTextarea = document.getElementById('jsonContent');
+
+    const rawData = <%- JSON.stringify(data) %>;
+    rawTextarea.value = JSON.stringify(rawData, null, 2);
+
+    function toggleMode() {
+        if (mode === 'ui') {
+            mode = 'raw';
+            uiDiv.style.display = 'none';
+            rawDiv.style.display = 'block';
+            toggleBtn.innerText = 'SWITCH TO UI FORMS';
+        } else {
+            mode = 'ui';
+            uiDiv.style.display = 'block';
+            rawDiv.style.display = 'none';
+            toggleBtn.innerText = 'SWITCH TO RAW KERNEL';
+        }
+    }
+</script>
+
+</body>
+</html>

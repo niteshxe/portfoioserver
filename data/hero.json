@@ -1,0 +1,35 @@
+{
+  "status": {
+    "text": "AI ENGINEEER",
+    "active": true
+  },
+  "title": {
+    "solid": "NITESH KUMAR",
+    "outline": "VASHISHT "
+  },
+  "roles": [
+    "FULL-STACK DEVELOPER",
+    "AI/ML ENTHUSIAST",
+    "UI/UX DESIGNER"
+  ],
+  "metrics": [
+    {
+      "label": "PROJECTS COMPLETED",
+      "value": "DYNAMIC",
+      "sub": "HIGH-PERFORMANCE SYSTEMS",
+      "highlight": false
+    },
+    {
+      "label": "YEARS EXPERIENCE",
+      "value": "04+",
+      "sub": "COMMERCIAL & FREELANCE",
+      "highlight": true
+    },
+    {
+      "label": "SATISFACTION",
+      "value": "100%",
+      "sub": "CLIENT FEEDBACK // SYNCED",
+      "highlight": false
+    }
+  ]
+}

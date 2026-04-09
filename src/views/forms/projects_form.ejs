@@ -1,0 +1,127 @@
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 1.5rem;">
+        <h2 style="text-transform: uppercase; font-size: 1rem;">PROJECT KERNEL MANAGER</h2>
+        <div style="display: flex; gap: 1rem; align-items: center;">
+            <input type="number" id="batch-count" value="1" min="1" max="10" style="margin-bottom: 0; width: 60px; padding: 0.5rem;">
+            <button type="button" onclick="batchAddProjects()" style="margin-bottom: 0; width: auto; background: #222; border: 1px solid var(--border-light); font-size: 0.7rem; padding: 0.5rem 1rem;">BATCH ADD PROJECTS</button>
+        </div>
+    </div>
+
+    <div id="projects-list">
+        <% data.forEach((project, index) => { %>
+            <div class="card" style="margin-bottom: 2rem; border-left: 2px solid var(--accent-color);">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+                    <div class="status-badge">PROJECT ID: <%= project.id %></div>
+                    <div style="color: rgba(255,255,255,0.3); font-size: 0.7rem;">HASH: <%= Math.random().toString(36).substring(7) %></div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem;">
+                    <div>
+                        <label>PROJECT NAME</label>
+                        <input type="text" name="projects[<%= index %>][name]" value="<%= project.name %>">
+                    </div>
+                    <div>
+                        <label>YEAR</label>
+                        <input type="text" name="projects[<%= index %>][year]" value="<%= project.year %>">
+                    </div>
+                </div>
+
+                <label>DESCRIPTION</label>
+                <textarea name="projects[<%= index %>][description]" style="height: 100px;"><%= project.description %></textarea>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div>
+                        <label>TAGS (COMMA SEPARATED)</label>
+                        <input type="text" name="projects[<%= index %>][tags]" value="<%= project.tags.join(', ') %>">
+                    </div>
+                    <div>
+                        <label>EXTERNAL LINK</label>
+                        <input type="text" name="projects[<%= index %>][link]" value="<%= project.link %>">
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div>
+                        <label>IMAGE URL</label>
+                        <input type="text" name="projects[<%= index %>][image]" value="<%= project.image %>">
+                    </div>
+                    <div>
+                        <label>STATUS</label>
+                        <select name="projects[<%= index %>][inProgress]">
+                            <option value="false" <%= !project.inProgress ? 'selected' : '' %>>DEPLOYED // STABLE</option>
+                            <option value="true" <%= project.inProgress ? 'selected' : '' %>>IN PROGRESS // BETA</option>
+                        </select>
+                    </div>
+                </div>
+
+                <input type="hidden" name="projects[<%= index %>][id]" value="<%= project.id %>">
+            </div>
+        <% }) %>
+    </div>
+</div>
+
+<script>
+    function batchAddProjects() {
+        const count = parseInt(document.getElementById('batch-count').value) || 1;
+        const container = document.getElementById('projects-list');
+        
+        for (let i = 0; i < count; i++) {
+            const index = container.children.length;
+            const nextId = index + 1;
+            const div = document.createElement('div');
+            div.className = 'card';
+            div.style.marginBottom = '2rem';
+            div.style.borderLeft = '2px solid var(--accent-color)';
+            div.style.borderColor = 'rgba(255,17,0,0.3)';
+
+            div.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+                    <div class="status-badge">PROJECT ID: NEW_${nextId}</div>
+                    <div style="color: rgba(255,255,255,0.3); font-size: 0.7rem;">BUFFERED STATE</div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem;">
+                    <div>
+                        <label>PROJECT NAME</label>
+                        <input type="text" name="projects[${index}][name]" placeholder="STARRY NIGHT">
+                    </div>
+                    <div>
+                        <label>YEAR</label>
+                        <input type="text" name="projects[${index}][year]" placeholder="2026">
+                    </div>
+                </div>
+
+                <label>DESCRIPTION</label>
+                <textarea name="projects[${index}][description]" style="height: 100px;"></textarea>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div>
+                        <label>TAGS (COMMA SEPARATED)</label>
+                        <input type="text" name="projects[${index}][tags]" placeholder="React, WebGL">
+                    </div>
+                    <div>
+                        <label>EXTERNAL LINK</label>
+                        <input type="text" name="projects[${index}][link]" placeholder="https://...">
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div>
+                        <label>IMAGE URL</label>
+                        <input type="text" name="projects[${index}][image]" placeholder="/assets/thumb.jpg">
+                    </div>
+                    <div>
+                        <label>STATUS</label>
+                        <select name="projects[${index}][inProgress]">
+                            <option value="false">DEPLOYED // STABLE</option>
+                            <option value="true">IN PROGRESS // BETA</option>
+                        </select>
+                    </div>
+                </div>
+
+                <input type="hidden" name="projects[${index}][id]" value="${nextId}">
+            `;
+            container.appendChild(div);
+        }
+    }
+</script>
