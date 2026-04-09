@@ -1,0 +1,58 @@
+<div class="card">
+    <div class="status-badge">SECTION // GLOBAL TICKER SEQUENCE</div>
+    <p style="color: rgba(255,255,255,0.5); font-size: 0.8rem; margin-bottom: 2rem;">Manage the sequence of text and accent markers for the scrolling ticker.</p>
+    
+    <div id="ticker-list">
+        <% data.forEach((segment, index) => { %>
+            <div class="card" style="margin-bottom: 1rem; padding: 1rem; border-color: rgba(255,255,255,0.05); position: relative;">
+                <button type="button" onclick="this.parentElement.remove()" style="position: absolute; top: 1rem; right: 1rem; width: auto; background: rgba(255,0,0,0.1); color: var(--accent-color); border: 1px solid var(--accent-color); padding: 0.3rem 0.6rem; font-size: 0.6rem;">DELETE</button>
+                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem;">
+                    <div>
+                        <label>TEXT CONTENT</label>
+                        <input type="text" name="ticker[<%= index %>][text]" value="<%= segment.text %>">
+                    </div>
+                    <div>
+                        <label>ACCENT STYLE</label>
+                        <select name="ticker[<%= index %>][accent]">
+                            <option value="false" <%= !segment.accent ? 'selected' : '' %>>NORMAL TEXT</option>
+                            <option value="true" <%= segment.accent ? 'selected' : '' %>>SYST. ACCENT (◆)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        <% }) %>
+    </div>
+    <button type="button" onclick="addTickerSegment()" style="background: #222; margin-top: 1rem; font-size: 0.7rem; width: auto; padding: 0.5rem 1rem;">+ ADD TICKER SEGMENT</button>
+</div>
+
+<script>
+    function addTickerSegment() {
+        const container = document.getElementById('ticker-list');
+        const index = Date.now();
+        const div = document.createElement('div');
+        div.className = 'card';
+        div.style.marginBottom = '1rem';
+        div.style.padding = '1rem';
+        div.style.borderColor = 'rgba(0,255,65,0.3)';
+        div.style.position = 'relative';
+
+        div.innerHTML = `
+            <button type="button" onclick="this.parentElement.remove()" style="position: absolute; top: 1rem; right: 1rem; width: auto; background: rgba(255,0,0,0.1); color: var(--accent-color); border: 1px solid var(--accent-color); padding: 0.3rem 0.6rem; font-size: 0.6rem;">DELETE</button>
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem;">
+                <div>
+                    <label>TEXT CONTENT</label>
+                    <input type="text" name="ticker[${index}][text]" placeholder="NITESH VASHISHT">
+                </div>
+                <div>
+                    <label>ACCENT STYLE</label>
+                    <select name="ticker[${index}][accent]">
+                        <option value="false">NORMAL TEXT</option>
+                        <option value="true">SYST. ACCENT (◆)</option>
+                    </select>
+                </div>
+            </div>
+        `;
+        container.appendChild(div);
+    }
+</script>
+

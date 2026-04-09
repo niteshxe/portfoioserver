@@ -2,148 +2,137 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import Project from "../src/models/Project";
 import PortfolioData from "../src/models/PortfolioData";
+import Auth from "../src/models/Auth";
 
 dotenv.config();
 
-const initialData = {
+const goldenData = {
   hero: {
     status: {
-      text: "OPEN TO OPPORTUNITIES",
       active: true,
+      text: "OPERATIONAL // STATUS: ACTIVE"
     },
     title: {
       solid: "NITESH",
-      outline: "KUMAR",
+      outline: "VASHISHT"
     },
-    roles: ["Full Stack Developer", "UI Explorer", "Problem Solver"],
-    description: "Creating beautiful web experiences with modern technologies.",
+    roles: ["SOFTWARE ENGINEER", "AI ARCHITECT", "FULL-STACK DEVELOPER"],
+    metrics: [
+      { "label": "EXPERIENCE", "value": "04+", "sub": "YEARS TOTAL", "highlight": false },
+      { "label": "PROJECTS", "value": "DYNAMIC", "sub": "LIVE SYSTEM", "highlight": true },
+      { "label": "AVALABILITY", "value": "80%", "sub": "OPEN FOR GIGS", "highlight": false }
+    ]
+  },
+  about: {
+    subtitle: "CRAFTING HIGH-PERFORMANCE DIGITAL ECOSYSTEMS AT THE INTERSECTION OF DESIGN AND ENGINEERING.",
+    paragraphs: [
+      "I am Nitesh Kumar Vashisht, a Software Engineer dedicated to building industrial-grade web applications and AI-driven systems. My approach merges brutalist aesthetics with high-velocity performance, ensuring every bit serves a purpose.",
+      "With a strong foundation in Full-Stack development and Machine Learning, I specialize in architecting scalable solutions that push the boundaries of current web technologies. From IoT integrations to complex 3D visualizations, I thrive on technical challenges.",
+      "Currently based in India, I'm working with cutting-edge startups to redefine user interaction through experimental interfaces and robust backend logic."
+    ],
+    experience: [
+      {
+        "id": "exp1",
+        "period": "2024 — PRESENT",
+        "company": "TECH-X SYSTEMS",
+        "role": "SR. FULL-STACK ENGINEER",
+        "description": "Leading the development of high-performance dashboards and AI integration modules. Optimizing system architecture for real-time data processing."
+      },
+      {
+        "id": "exp2",
+        "period": "2023 — 2024",
+        "company": "KINETIC LABS",
+        "role": "AI ARCHITECT",
+        "description": "Designed and implemented machine learning pipelines for predictive maintenance in industrial IoT environments."
+      }
+    ],
+    skills: ["REACT", "TYPESCRIPT", "NODE.JS", "PYTHON", "GSAP", "THREE.JS", "DOCKER", "AWS", "PYTORCH"]
   },
   projects: [
     {
-      id: 1,
-      title: "Portfolio Website",
-      description: "Personal portfolio showcasing projects and skills",
-      image: "/assets/project1.png",
-      link: "https://github.com/niteshxe/portfolio",
-      inProgress: false,
-      tags: ["React", "TypeScript", "Vite"],
+      "id": "p1",
+      "name": "NEURAL CORE",
+      "year": "2025",
+      "description": "An experimental AI-powered project management system for high-velocity teams. Features real-time task optimization.",
+      "tags": ["AI", "NEXT.JS", "GSAP"],
+      "link": "https://github.com",
+      "inProgress": true
     },
     {
-      id: 2,
-      title: "CMS Dashboard",
-      description: "Content management system for portfolio",
-      image: "/assets/project2.png",
-      link: "https://github.com/niteshxe/portfoioserver",
-      inProgress: false,
-      tags: ["Node.js", "Express", "MongoDB"],
+      "id": "p2",
+      "name": "VELOCITY",
+      "year": "2024",
+      "description": "High-performance data visualization engine for real-time market metrics. Sub-10ms latency.",
+      "tags": ["THREE.JS", "WEBGL", "RUST"],
+      "link": "https://github.com",
+      "inProgress": false
     },
     {
-      id: 3,
-      title: "API Server",
-      description: "RESTful backend API with authentication",
-      image: "/assets/project3.png",
-      link: "https://github.com/niteshxe/portfoioserver",
-      inProgress: true,
-      tags: ["Express", "JWT", "MongoDB"],
-    },
+      "id": "p3",
+      "name": "QUANTUM",
+      "year": "2024",
+      "description": "Blockchain-based identity verification system with zero-knowledge proofs.",
+      "tags": ["WEB3", "SOLIDITY", "REACT"],
+      "link": "https://github.com",
+      "inProgress": false
+    }
   ],
   resume: {
-    resumeUrl: "https://drive.google.com/your-resume.pdf",
-    experience: [
+    "resumeUrl": "/resume.pdf",
+    "experience": [
       {
-        role: "Full Stack Developer",
-        year: "2023 - Present",
-        company: "Your Company",
-        description:
-          "Building scalable web applications with React and Node.js",
+        "role": "Senior Software Engineer",
+        "company": "Tech-X Systems",
+        "year": "2024 — Present",
+        "description": "Leading engineering efforts for enterprise AI solutions."
       },
       {
-        role: "Frontend Developer",
-        year: "2022 - 2023",
-        company: "Previous Company",
-        description: "Developed responsive UI components and web interfaces",
-      },
+        "role": "AI Specialist",
+        "company": "Kinetic Labs",
+        "year": "2023 — 2024",
+        "description": "Developed proprietary ML models for computer vision."
+      }
     ],
-    education: [
+    "education": [
       {
-        degree: "B.Tech in Computer Science",
-        year: "2023",
-        institution: "Your University",
-        description: "Focus on web development and software engineering",
-      },
+        "degree": "B.Tech in Computer Science",
+        "institution": "Technical University",
+        "year": "2019 — 2023",
+        "description": "Specialization in Artificial Intelligence and Data Science."
+      }
     ],
-    skills: [
+    "skills": [
       {
-        category: "Frontend",
-        items: ["React", "TypeScript", "Tailwind CSS", "GSAP"],
+        "category": "LANGUAGES",
+        "items": ["TypeScript", "Python", "Rust", "Go", "C++"]
       },
       {
-        category: "Backend",
-        items: ["Node.js", "Express", "MongoDB", "JWT"],
+        "category": "FRONTEND",
+        "items": ["React", "Next.js", "Three.js", "GSAP", "Tailwind"]
       },
       {
-        category: "Tools",
-        items: ["Git", "Docker", "Vite", "Render"],
-      },
-    ],
+        "category": "BACKEND",
+        "items": ["Node.js", "Express", "FastAPI", "PostgreSQL", "Redis"]
+      }
+    ]
   },
-  contact: {
-    title: "GET IN TOUCH",
-    subtitle: "Lets collaborate and create something amazing",
-    email: "niteshxe.dev@gmail.com",
-    description:
-      "Feel free to reach out for any inquiries or collaboration opportunities.",
-    socials: [
-      {
-        id: 1,
-        platform: "GitHub",
-        handle: "niteshxe",
-        url: "https://github.com/niteshxe",
-      },
-      {
-        id: 2,
-        platform: "LinkedIn",
-        handle: "niteshxe",
-        url: "https://linkedin.com/in/niteshxe",
-      },
-      {
-        id: 3,
-        platform: "Twitter",
-        handle: "niteshxe",
-        url: "https://twitter.com/niteshxe",
-      },
-    ],
+  "contact": {
+    "description": "INTERESTED IN COLLABORATING ON EXPERIMENTAL PROJECTS OR HIGH-PERFORMANCE SYSTEMS? LET'S CONNECT.",
+    "email": "hello@niteshxe.dev",
+    "socials": [
+      { "id": "s1", "platform": "GITHUB", "handle": "NITESHXE", "url": "https://github.com" },
+      { "id": "s2", "platform": "LINKEDIN", "handle": "NITESHV", "url": "https://linkedin.com" },
+      { "id": "s3", "platform": "TWITTER", "handle": "@NITESHXE", "url": "https://twitter.com" }
+    ]
   },
-  about: {
-    title: "ABOUT ME",
-    subtitle: "Currently available for work",
-    paragraphs: [
-      "I am a passionate full-stack developer with expertise in modern web technologies.",
-      "I love building beautiful, functional web applications that solve real problems.",
-      "Always learning and exploring new technologies to improve my craft.",
-    ],
-    experience: [
-      {
-        id: 1,
-        role: "Full Stack Developer",
-        period: "2023 - Present",
-        company: "Current Role",
-        description: "Working on various web projects",
-      },
-    ],
-    skills: [
-      "React",
-      "Node.js",
-      "MongoDB",
-      "TypeScript",
-      "Express",
-      "Tailwind CSS",
-    ],
-  },
-  ticker: {
-    text: "Currently available for freelance projects • Open to collaborations",
-    link: "/contact",
-  },
+  "ticker": [
+    { "text": "NITESH VASHISHT", "accent": false },
+    { "text": "◆", "accent": true },
+    { "text": "SYSTEMS ARCHITECT", "accent": false },
+    { "text": "◆", "accent": true },
+    { "text": "AVAILABLE FOR Q3 2026", "accent": false },
+    { "text": "◆", "accent": true }
+  ]
 };
 
 const seedDB = async () => {
@@ -159,25 +148,35 @@ const seedDB = async () => {
     // Clear existing data
     await Project.deleteMany({});
     await PortfolioData.deleteMany({});
+    await Auth.deleteMany({});
     console.log("🗑️  Cleared existing data");
 
-    // Seed Projects
-    await Project.insertMany(initialData.projects);
+    // Seed Admin User
+    const adminUser = process.env.ADMIN_USER || "admin";
+    const adminPass = process.env.ADMIN_PASS || "admin123";
+    await Auth.create({ username: adminUser, password: adminPass });
+    console.log(`✅ Admin user seeded: ${adminUser}`);
+
+    // Seed Projects (Using string IDs and 'name' field directly)
+    await Project.insertMany(goldenData.projects.map(p => ({
+        ...p,
+        image: "/assets/projects/p1.jpg" // Placeholder
+    })));
     console.log("✅ Projects seeded");
 
-    // Seed other data
+    // Seed other data kernels
     const dataEntries = [
-      { _id: "hero", data: initialData.hero },
-      { _id: "resume", data: initialData.resume },
-      { _id: "contact", data: initialData.contact },
-      { _id: "about", data: initialData.about },
-      { _id: "ticker", data: initialData.ticker },
+      { _id: "hero", data: goldenData.hero },
+      { _id: "resume", data: goldenData.resume },
+      { _id: "contact", data: goldenData.contact },
+      { _id: "about", data: goldenData.about },
+      { _id: "ticker", data: goldenData.ticker },
     ];
 
     await PortfolioData.insertMany(dataEntries);
     console.log("✅ Portfolio data seeded");
 
-    console.log("🎉 Database seeded successfully!");
+    console.log("🎉 Golden Database seeded successfully!");
     await mongoose.disconnect();
     process.exit(0);
   } catch (error) {

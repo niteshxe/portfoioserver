@@ -2,6 +2,7 @@ import express from "express";
 import path from "path";
 import cookieParser from "cookie-parser";
 import helmet from "helmet";
+import compression from "compression";
 import rateLimit from "express-rate-limit";
 import dotenv from "dotenv";
 import cors from "cors";
@@ -16,12 +17,15 @@ dotenv.config({ path: path.resolve(__dirname, "..", ".env") });
 const app = express();
 
 // Security Middlewares
+console.log(process.env.CORS_ORIGIN)
 app.use(
   cors({
     origin: process.env.CORS_ORIGIN || "http://localhost:5173",
+    
     credentials: true,
   }),
 );
+app.use(compression());
 app.use(
   helmet({
     contentSecurityPolicy: false,
@@ -45,7 +49,7 @@ app.use(express.static(path.join(__dirname, "public")));
 // Routes
 app.use("/", authRoutes);
 app.use("/", cmsRoutes);
-app.use("/api/data", apiRoutes);
+app.use("/api", apiRoutes);
 
 app.get("/", (req: express.Request, res: express.Response) =>
   res.redirect("/dashboard"),

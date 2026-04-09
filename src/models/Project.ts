@@ -2,12 +2,14 @@ import mongoose from "mongoose";
 
 const projectSchema = new mongoose.Schema(
   {
-    id: { type: Number, unique: true },
-    title: String,
+    id: { type: String, unique: true },
+    name: String,
+    year: String,
     description: String,
     image: String,
     link: String,
     tags: [String],
+    inProgress: { type: Boolean, default: false },
     updated_at: { type: Date, default: Date.now },
   },
   { collection: "projects" },

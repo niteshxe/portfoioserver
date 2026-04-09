@@ -1,9 +1,10 @@
 import { Request, Response } from "express";
 import Project from "../models/Project";
 import PortfolioData from "../models/PortfolioData";
+import cache from "../utils/cache";
 
 export const getDashboard = (req: Request, res: Response) => {
-  const files = ["hero", "projects", "resume", "contact", "about"];
+  const files = ["hero", "projects", "resume", "contact", "about", "ticker"];
   res.render("dashboard", { files });
 };
 
@@ -47,33 +48,78 @@ export const updateFile = async (req: Request, res: Response) => {
         hero.status = hero.status || {};
         hero.status.active = hero.status.active === "true";
         hero.roles = (body.roles as string).split(",").map((r) => r.trim());
+        // Handle metrics if present
+        if (body.metrics) {
+            hero.metrics = Object.values(body.metrics).map((m: any) => ({
+                ...m,
+                highlight: m.highlight === "true"
+            }));
+        }
         finalData = hero;
       } else if (fileName === "projects") {
-        finalData = (body.projects as any[]).map((p) => ({
-          ...p,
-          id: parseInt(p.id),
-          inProgress: p.inProgress === "true",
-          tags: (p.tags as string).split(",").map((t) => t.trim()),
-        }));
+        if (body.projects) {
+            finalData = Object.values(body.projects).map((p: any) => ({
+                ...p,
+                id: p.id,
+                inProgress: p.inProgress === "true",
+                tags: (p.tags as string).split(",").map((t) => t.trim()),
+            }));
+        } else {
+            finalData = [];
+        }
       } else if (fileName === "resume") {
         const resume = body;
-        resume.skills = (body.skills as any[]).map((s) => ({
-          ...s,
-          items: (s.items as string).split(",").map((i) => i.trim()),
-        }));
-        resume.resumeUrl = body.resumeUrl;
+        if (body.experience) {
+            resume.experience = Object.values(body.experience);
+        } else {
+            resume.experience = [];
+        }
+        if (body.education) {
+            resume.education = Object.values(body.education);
+        } else {
+            resume.education = [];
+        }
+        if (body.skills) {
+          resume.skills = Object.values(body.skills).map((s: any) => ({
+            ...s,
+            items: (s.items as string).split(",").map((i) => i.trim()),
+          }));
+        } else {
+            resume.skills = [];
+        }
         finalData = resume;
       } else if (fileName === "about") {
         const about = body;
         about.skills = (body.skills as string).split(",").map((s) => s.trim());
-        about.experience = (body.about_exp as any[]).map((exp) => ({
-          ...exp,
-          id: parseInt(exp.id),
-        }));
+        if (body.about_exp) {
+            about.experience = Object.values(body.about_exp).map((exp: any) => ({
+                ...exp,
+                id: exp.id,
+            }));
+        } else {
+            about.experience = [];
+        }
         delete about.about_exp;
         finalData = about;
       } else if (fileName === "contact") {
+        if (body.socials) {
+            body.socials = Object.values(body.socials).map((s: any) => ({
+                ...s,
+                id: s.id
+            }));
+        } else {
+            body.socials = [];
+        }
         finalData = body;
+      } else if (fileName === "ticker") {
+        if (body.ticker) {
+          finalData = Object.values(body.ticker).map((s: any) => ({
+            ...s,
+            accent: s.accent === "true",
+          }));
+        } else {
+          finalData = [];
+        }
       }
     } else {
       // Direct Buffer Mode (JSON content)
@@ -84,7 +130,9 @@ export const updateFile = async (req: Request, res: Response) => {
     if (fileName === "projects") {
       // Clear and re-insert projects
       await Project.deleteMany({});
-      await Project.insertMany(finalData);
+      if (finalData.length > 0) {
+        await Project.insertMany(finalData);
+      }
     } else {
       // Update or create document in PortfolioData
       await PortfolioData.findByIdAndUpdate(
@@ -94,9 +142,15 @@ export const updateFile = async (req: Request, res: Response) => {
       );
     }
 
+    // Clear Cache to force refresh on next API call
+    cache.flushAll();
+    console.log("CACHE_FLUSHED: SYSTEM_STATE_UPDATED");
+
     res.redirect(`/edit/${fileName}?success=1`);
   } catch (error) {
-    console.error("Save Error:", error);
-    res.status(500).send("Failed to update data. Check your input formatting.");
+    console.error(`ERROR: FAILED_TO_UPDATE_FILE [${req.params.fileName}]`);
+    console.error(error);
+    res.status(500).send("Failed to update data. Check your terminal logs for specific formatting errors.");
   }
 };
+
