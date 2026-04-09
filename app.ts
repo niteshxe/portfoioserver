@@ -5,6 +5,7 @@ import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import dotenv from "dotenv";
 import cors from "cors";
+import { connectDB } from "./src/db/connection";
 import authRoutes from "./src/routes/authRoutes";
 import cmsRoutes from "./src/routes/cmsRoutes";
 import apiRoutes from "./src/routes/apiRoutes";
@@ -37,7 +38,6 @@ const limiter = rateLimit({
 });
 app.use("/auth", limiter);
 
-
 app.set("view engine", "ejs");
 app.set("views", path.join(process.cwd(), "src", "views"));
 app.use(express.static(path.join(process.cwd(), "public")));
@@ -52,8 +52,9 @@ app.get("/", (req: express.Request, res: express.Response) =>
 
 // Fix 2: cast PORT to number so TypeScript accepts it
 const PORT = Number(process.env.PORT) || 3001;
-app.listen(PORT, "0.0.0.0", () => {
+app.listen(PORT, "0.0.0.0", async () => {
   console.log(`CMS Backend running on port ${PORT}`);
+  await connectDB();
 });
 
 export default app;

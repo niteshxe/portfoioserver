@@ -1,60 +1,62 @@
-import { Request, Response } from 'express';
-import fs from 'fs';
-import path from 'path';
+import { Request, Response } from "express";
+import Project from "../models/Project";
+import PortfolioData from "../models/PortfolioData";
 
-const DATA_DIR = path.join(__dirname, '../../data');
-
-export const getDataFile = (req: Request, res: Response) => {
-  const { fileName } = req.params;
-  const filePath = path.join(DATA_DIR, `${fileName}.json`);
-
-  if (!fs.existsSync(filePath)) {
-    return res.status(404).json({ error: `Kernel data [${fileName}] not found.` });
-  }
-
+export const getDataFile = async (req: Request, res: Response) => {
   try {
-    const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-    res.json(data);
+    const { fileName } = req.params;
+    const data = await PortfolioData.findById(fileName);
+
+    if (!data) {
+      return res.status(404).json({ error: `Data [${fileName}] not found.` });
+    }
+
+    res.json(data.data);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to read kernel data.' });
+    res.status(500).json({ error: "Failed to retrieve data." });
   }
 };
 
-export const getProjectById = (req: Request, res: Response) => {
-  const { id } = req.params;
-  const filePath = path.join(DATA_DIR, `projects.json`);
-
-  if (!fs.existsSync(filePath)) {
-    return res.status(404).json({ error: `Projects data not found.` });
-  }
-
+export const getProjectById = async (req: Request, res: Response) => {
   try {
-    const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-    const project = data.find((p: any) => String(p.id) === id);
-    if (!project) return res.status(404).json({ error: `Project [${id}] not found.` });
+    const { id } = req.params;
+    const idStr = Array.isArray(id) ? id[0] : id;
+    const project = await Project.findOne({ id: parseInt(idStr) });
+
+    if (!project) {
+      return res.status(404).json({ error: `Project [${idStr}] not found.` });
+    }
+
     res.json(project);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to read project data.' });
+    res.status(500).json({ error: "Failed to retrieve project." });
   }
 };
 
-export const getAllData = (req: Request, res: Response) => {
-  const files = ['hero', 'projects', 'resume', 'contact', 'about', 'ticker'];
-  const result: any = {};
-
+export const getAllData = async (req: Request, res: Response) => {
   try {
-    files.forEach(file => {
-      const filePath = path.join(DATA_DIR, `${file}.json`);
-      if (fs.existsSync(filePath)) {
-        result[file] = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-      } else {
-        result[file] = null;
-      }
-    });
+    const [heroData, projects, resumeData, contactData, aboutData, tickerData] =
+      await Promise.all([
+        PortfolioData.findById("hero"),
+        Project.find().sort({ id: 1 }),
+        PortfolioData.findById("resume"),
+        PortfolioData.findById("contact"),
+        PortfolioData.findById("about"),
+        PortfolioData.findById("ticker"),
+      ]);
+
+    const result = {
+      hero: heroData?.data || null,
+      projects: projects || [],
+      resume: resumeData?.data || null,
+      contact: contactData?.data || null,
+      about: aboutData?.data || null,
+      ticker: tickerData?.data || null,
+    };
 
     res.json(result);
   } catch (error) {
-    console.error('Unified Fetch Error:', error);
-    res.status(500).json({ error: 'Failed to aggregate kernel data.' });
+    console.error("Data fetch error:", error);
+    res.status(500).json({ error: "Failed to aggregate data." });
   }
 };
