@@ -21,6 +21,6 @@ services:
       - key: NOTIFICATION_EMAIL
         value: niteshxe.dev@gmail.com
       - key: CORS_ORIGIN
-        value: http://niteshxe.dev
+        value: https://your-frontend-domain.com
       - key: SESSION_SECRET
         scope: secret
