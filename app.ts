@@ -20,9 +20,9 @@ const app = express();
 console.log(process.env.CORS_ORIGIN)
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN || "http://localhost:5173",
-    
-    credentials: true,
+    origin: process.env.CORS_ORIGIN ||"https://niteshxe.dev", // NO trailing slash
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true, // if you use cookies/auth headers
   }),
 );
 app.use(compression());
