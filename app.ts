@@ -10,7 +10,8 @@ import authRoutes from "./src/routes/authRoutes";
 import cmsRoutes from "./src/routes/cmsRoutes";
 import apiRoutes from "./src/routes/apiRoutes";
 
-dotenv.config();
+// Load .env from backend directory (go up from dist to backend)
+dotenv.config({ path: path.resolve(__dirname, "..", ".env") });
 
 const app = express();
 

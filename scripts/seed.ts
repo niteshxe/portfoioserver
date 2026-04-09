@@ -7,10 +7,16 @@ dotenv.config();
 
 const initialData = {
   hero: {
-    name: "Nitesh Kumar",
-    title: "Full Stack Developer",
-    description: "Building web experiences with React, Node.js, and MongoDB",
-    cta: "View My Work",
+    status: {
+      text: "OPEN TO OPPORTUNITIES",
+      active: true,
+    },
+    title: {
+      solid: "NITESH",
+      outline: "KUMAR",
+    },
+    roles: ["Full Stack Developer", "UI Explorer", "Problem Solver"],
+    description: "Creating beautiful web experiences with modern technologies.",
   },
   projects: [
     {
@@ -19,6 +25,7 @@ const initialData = {
       description: "Personal portfolio showcasing projects and skills",
       image: "/assets/project1.png",
       link: "https://github.com/niteshxe/portfolio",
+      inProgress: false,
       tags: ["React", "TypeScript", "Vite"],
     },
     {
@@ -27,6 +34,7 @@ const initialData = {
       description: "Content management system for portfolio",
       image: "/assets/project2.png",
       link: "https://github.com/niteshxe/portfoioserver",
+      inProgress: false,
       tags: ["Node.js", "Express", "MongoDB"],
     },
     {
@@ -35,50 +43,105 @@ const initialData = {
       description: "RESTful backend API with authentication",
       image: "/assets/project3.png",
       link: "https://github.com/niteshxe/portfoioserver",
+      inProgress: true,
       tags: ["Express", "JWT", "MongoDB"],
     },
   ],
   resume: {
-    email: "niteshxe.dev@gmail.com",
-    phone: "+91-XXXXXXXXXX",
-    location: "India",
+    resumeUrl: "https://drive.google.com/your-resume.pdf",
     experience: [
       {
-        title: "Full Stack Developer",
+        role: "Full Stack Developer",
+        year: "2023 - Present",
         company: "Your Company",
-        duration: "2023 - Present",
-        description: "Building scalable web applications",
+        description:
+          "Building scalable web applications with React and Node.js",
+      },
+      {
+        role: "Frontend Developer",
+        year: "2022 - 2023",
+        company: "Previous Company",
+        description: "Developed responsive UI components and web interfaces",
       },
     ],
     education: [
       {
-        degree: "B.Tech",
-        school: "Your University",
+        degree: "B.Tech in Computer Science",
         year: "2023",
+        institution: "Your University",
+        description: "Focus on web development and software engineering",
+      },
+    ],
+    skills: [
+      {
+        category: "Frontend",
+        items: ["React", "TypeScript", "Tailwind CSS", "GSAP"],
+      },
+      {
+        category: "Backend",
+        items: ["Node.js", "Express", "MongoDB", "JWT"],
+      },
+      {
+        category: "Tools",
+        items: ["Git", "Docker", "Vite", "Render"],
       },
     ],
   },
   contact: {
+    title: "GET IN TOUCH",
+    subtitle: "Lets collaborate and create something amazing",
     email: "niteshxe.dev@gmail.com",
-    phone: "+91-XXXXXXXXXX",
-    github: "https://github.com/niteshxe",
-    linkedin: "https://linkedin.com/in/niteshxe",
-    twitter: "https://twitter.com/niteshxe",
+    description:
+      "Feel free to reach out for any inquiries or collaboration opportunities.",
+    socials: [
+      {
+        id: 1,
+        platform: "GitHub",
+        handle: "niteshxe",
+        url: "https://github.com/niteshxe",
+      },
+      {
+        id: 2,
+        platform: "LinkedIn",
+        handle: "niteshxe",
+        url: "https://linkedin.com/in/niteshxe",
+      },
+      {
+        id: 3,
+        platform: "Twitter",
+        handle: "niteshxe",
+        url: "https://twitter.com/niteshxe",
+      },
+    ],
   },
   about: {
-    bio: "I am a full-stack developer passionate about building web applications.",
+    title: "ABOUT ME",
+    subtitle: "Currently available for work",
+    paragraphs: [
+      "I am a passionate full-stack developer with expertise in modern web technologies.",
+      "I love building beautiful, functional web applications that solve real problems.",
+      "Always learning and exploring new technologies to improve my craft.",
+    ],
+    experience: [
+      {
+        id: 1,
+        role: "Full Stack Developer",
+        period: "2023 - Present",
+        company: "Current Role",
+        description: "Working on various web projects",
+      },
+    ],
     skills: [
       "React",
-      "TypeScript",
       "Node.js",
       "MongoDB",
+      "TypeScript",
       "Express",
       "Tailwind CSS",
     ],
-    interests: ["Web Development", "Open Source", "Problem Solving"],
   },
   ticker: {
-    text: "Currently available for freelance projects",
+    text: "Currently available for freelance projects • Open to collaborations",
     link: "/contact",
   },
 };
