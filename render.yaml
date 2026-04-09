@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: portfolioserver
+    env: node
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: PORT
+        scope: runtime
+        value: 3001
+      - key: NODE_ENV
+        value: production
+      - key: JWT_SECRET
+        scope: secret
+      - key: ADMIN_USER
+        scope: secret
+      - key: ADMIN_PASS
+        scope: secret
+      - key: NOTIFICATION_EMAIL
+        value: niteshxe.dev@gmail.com
+      - key: CORS_ORIGIN
+        value: http://niteshxe.dev
+      - key: SESSION_SECRET
+        scope: secret
