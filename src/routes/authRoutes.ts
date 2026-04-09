@@ -8,7 +8,7 @@ router.post('/login', authController.login);
 router.get('/logout', authController.logout);
 
 // Registration routes
-router.get('/register', authController.getRegister);
+router.get('/register', (req, res) => res.render('register', { error: null }));
 router.post('/register', authController.postRegister);
 
 // OTP Verification routes

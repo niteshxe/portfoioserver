@@ -38,17 +38,6 @@ export const logout = (req: Request, res: Response) => {
 
 // --- Registration Logic ---
 
-export const getRegister = async (req: Request, res: Response) => {
-  try {
-    const userCount = await Auth.countDocuments();
-    if (userCount > 0) {
-      return res.redirect("/login");
-    }
-    res.render("register", { error: null });
-  } catch (error) {
-    res.redirect("/login");
-  }
-};
 
 export const postRegister = async (req: Request, res: Response) => {
   try {

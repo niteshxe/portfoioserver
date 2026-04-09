@@ -151,12 +151,7 @@ const seedDB = async () => {
     await Auth.deleteMany({});
     console.log("🗑️  Cleared existing data");
 
-    // Seed Admin User
-    const adminUser = process.env.ADMIN_USER || "admin";
-    const adminPass = process.env.ADMIN_PASS || "admin123";
-    await Auth.create({ username: adminUser, password: adminPass });
-    console.log(`✅ Admin user seeded: ${adminUser}`);
-
+ 
     // Seed Projects (Using string IDs and 'name' field directly)
     await Project.insertMany(goldenData.projects.map(p => ({
         ...p,
