@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import dotenv from 'dotenv';
-import { sendLoginNotification } from '../utils/email';
 
 dotenv.config();
 
@@ -23,9 +22,6 @@ export const login = async (req: Request, res: Response) => {
       sameSite: 'strict',
       maxAge: 3600000, // 1 hour
     });
-
-    // Send login alert email
-    await sendLoginNotification(req.ip || 'unknown', req.headers['user-agent'] || 'unknown');
 
     return res.redirect('/dashboard');
   }
