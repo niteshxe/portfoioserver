@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import Project from "../models/Project";
 import PortfolioData from "../models/PortfolioData";
 import cache from "../utils/cache";
+import { getDefaultData, readBackupData, saveBackupData } from "../utils/defaults";
 
 export const getDashboard = (req: Request, res: Response) => {
   const files = ["hero", "projects", "resume", "contact", "about", "ticker"];
@@ -12,16 +13,36 @@ export const getEditFile = async (req: Request, res: Response) => {
   try {
     const fileName = req.params.fileName as string;
 
-    let data;
-    if (fileName === "projects") {
-      const projects = await Project.find().sort({ id: 1 });
-      data = projects;
-    } else {
-      const docData = await PortfolioData.findById(fileName);
-      data = docData ? docData.data : null;
+    let data = null;
+    
+    // Try Database First
+    try {
+      if (fileName === "projects") {
+        const projects = await Project.find().sort({ id: 1 });
+        if (projects && projects.length > 0) {
+          data = projects;
+        }
+      } else {
+        const docData = await PortfolioData.findById(fileName);
+        if (docData && docData.data) {
+          data = docData.data;
+        }
+      }
+    } catch (dbError) {
+      console.error(`Database query failed for ${fileName}, attempting local backup fallback:`, dbError);
     }
 
+    // Try Local Backup Second
     if (!data) {
+      data = readBackupData(fileName);
+    }
+
+    // Try Defaults Third
+    if (!data) {
+      data = getDefaultData(fileName);
+    }
+
+    if (data === null || data === undefined) {
       return res.status(404).send("Data not found");
     }
 
@@ -33,9 +54,8 @@ export const getEditFile = async (req: Request, res: Response) => {
 };
 
 export const updateFile = async (req: Request, res: Response) => {
+  const fileName = req.params.fileName as string;
   try {
-    const fileName = req.params.fileName as string;
-
     let finalData;
 
     if (req.body._ui_mode) {
@@ -126,20 +146,27 @@ export const updateFile = async (req: Request, res: Response) => {
       finalData = JSON.parse(req.body.jsonContent);
     }
 
+    // Always save local backup first so we don't lose data even if DB is corrupted/offline
+    saveBackupData(fileName, finalData);
+
     // Save to MongoDB
-    if (fileName === "projects") {
-      // Clear and re-insert projects
-      await Project.deleteMany({});
-      if (finalData.length > 0) {
-        await Project.insertMany(finalData);
+    try {
+      if (fileName === "projects") {
+        // Clear and re-insert projects
+        await Project.deleteMany({});
+        if (finalData.length > 0) {
+          await Project.insertMany(finalData);
+        }
+      } else {
+        // Update or create document in PortfolioData
+        await PortfolioData.findByIdAndUpdate(
+          fileName,
+          { data: finalData, updated_at: new Date() },
+          { upsert: true, new: true },
+        );
       }
-    } else {
-      // Update or create document in PortfolioData
-      await PortfolioData.findByIdAndUpdate(
-        fileName,
-        { data: finalData, updated_at: new Date() },
-        { upsert: true, new: true },
-      );
+    } catch (dbError) {
+      console.error(`Database write failed for ${fileName}. Changes were saved to local backup file.`, dbError);
     }
 
     // Clear Cache to force refresh on next API call
@@ -148,9 +175,10 @@ export const updateFile = async (req: Request, res: Response) => {
 
     res.redirect(`/edit/${fileName}?success=1`);
   } catch (error) {
-    console.error(`ERROR: FAILED_TO_UPDATE_FILE [${req.params.fileName}]`);
+    console.error(`ERROR: FAILED_TO_UPDATE_FILE [${fileName}]`);
     console.error(error);
     res.status(500).send("Failed to update data. Check your terminal logs for specific formatting errors.");
   }
 };
+
 
