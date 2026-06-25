@@ -2,27 +2,38 @@ import { Request, Response } from "express";
 import Project from "../models/Project";
 import PortfolioData from "../models/PortfolioData";
 import cache from "../utils/cache";
-import { getDefaultData, readBackupData } from "../utils/defaults";
+import { getDefaultData, readBackupData, mergeWithDefaults } from "../utils/defaults";
 
 const getDataOrFallback = async (fileName: string): Promise<any> => {
+  let data = null;
   try {
     if (fileName === "projects") {
       const projects = await Project.find().sort({ id: 1 }).lean();
-      if (projects && projects.length > 0) return projects;
+      if (projects && projects.length > 0) data = projects;
     } else {
       const doc = await PortfolioData.findById(fileName).lean();
-      if (doc && doc.data) return doc.data;
+      if (doc && doc.data) data = doc.data;
     }
   } catch (error) {
     console.error(`Database query failed for ${fileName}, attempting local backup fallback:`, error);
   }
 
   // Fallback to local backup
-  const backup = readBackupData(fileName);
-  if (backup !== null && backup !== undefined) return backup;
+  if (!data) {
+    data = readBackupData(fileName);
+  }
 
   // Fallback to default schema
-  return getDefaultData(fileName);
+  if (!data) {
+    data = getDefaultData(fileName);
+  }
+
+  // Merge with defaults to ensure all required fields are present
+  if (data && fileName !== "projects" && fileName !== "ticker") {
+    data = mergeWithDefaults(fileName, data);
+  }
+
+  return data;
 };
 
 export const getDataFile = async (req: Request, res: Response) => {

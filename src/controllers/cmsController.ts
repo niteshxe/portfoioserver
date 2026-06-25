@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import Project from "../models/Project";
 import PortfolioData from "../models/PortfolioData";
 import cache from "../utils/cache";
-import { getDefaultData, readBackupData, saveBackupData } from "../utils/defaults";
+import { getDefaultData, readBackupData, saveBackupData, mergeWithDefaults } from "../utils/defaults";
 
 export const getDashboard = (req: Request, res: Response) => {
   const files = ["hero", "projects", "resume", "contact", "about", "ticker"];
@@ -44,6 +44,11 @@ export const getEditFile = async (req: Request, res: Response) => {
 
     if (data === null || data === undefined) {
       return res.status(404).send("Data not found");
+    }
+
+    // Merge retrieved data with defaults to ensure all fields expected by templates are present
+    if (fileName !== "projects" && fileName !== "ticker") {
+      data = mergeWithDefaults(fileName, data);
     }
 
     res.render("edit", { fileName, data });

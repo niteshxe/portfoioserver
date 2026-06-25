@@ -74,3 +74,30 @@ export const readBackupData = (fileName: string) => {
   }
   return null;
 };
+
+export const deepMerge = (target: any, source: any): any => {
+  if (source === null || source === undefined) return target;
+  if (target === null || target === undefined) return source;
+
+  if (typeof target !== "object" || typeof source !== "object" || Array.isArray(target) || Array.isArray(source)) {
+    return source;
+  }
+
+  const result = { ...target };
+  for (const key of Object.keys(source)) {
+    if (source[key] !== undefined) {
+      if (typeof source[key] === "object" && source[key] !== null) {
+        result[key] = deepMerge(target[key], source[key]);
+      } else {
+        result[key] = source[key];
+      }
+    }
+  }
+  return result;
+};
+
+export const mergeWithDefaults = (fileName: string, data: any): any => {
+  const defaults = getDefaultData(fileName);
+  return deepMerge(defaults, data);
+};
+
