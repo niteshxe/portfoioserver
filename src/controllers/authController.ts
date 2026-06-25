@@ -66,7 +66,7 @@ export const postRegister = async (req: Request, res: Response) => {
         userData: { username, password },
         createdAt: new Date() 
       },
-      { upsert: true, new: true }
+      { upsert: true, returnDocument: "after" }
     );
 
     // Send OTP via email

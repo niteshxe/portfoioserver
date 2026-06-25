@@ -43,7 +43,7 @@ async function migrate() {
       await PortfolioData.findByIdAndUpdate(
         section,
         { data: jsonData[section], updated_at: new Date() },
-        { upsert: true, new: true }
+        { upsert: true, returnDocument: "after" }
       );
     }
 

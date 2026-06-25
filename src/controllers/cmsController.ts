@@ -167,7 +167,7 @@ export const updateFile = async (req: Request, res: Response) => {
         await PortfolioData.findByIdAndUpdate(
           fileName,
           { data: finalData, updated_at: new Date() },
-          { upsert: true, new: true },
+          { upsert: true, returnDocument: "after" },
         );
       }
     } catch (dbError) {
